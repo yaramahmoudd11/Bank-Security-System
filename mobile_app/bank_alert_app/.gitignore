@@ -1,0 +1,17 @@
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+*.log
+android/hs_err_pid*.log
+android/replay_pid*.log
+hs_err_pid*.log
+
+.env
+*.envnode_modules/
+*firebase-adminsdk*.json
+firebase-service-account.json
