@@ -352,7 +352,7 @@ Predictions below this threshold are treated as `UNKNOWN`.
 ### Docker Hub Image
 
 ```bash
-sudo docker pull hagar633/bank_sys:latest
+sudo docker pull hagar633/bank_sys2:latest
 ```
 
 ### Build Locally
@@ -392,8 +392,8 @@ sudo docker run --privileged --network host \
 
 ```bash
 sudo docker login
-sudo docker tag bank_sys hagar633/bank_sys:latest
-sudo docker push hagar633/bank_sys:latest
+sudo docker tag bank_sys hagar633/bank_sys2:latest
+sudo docker push hagar633/bank_sys2:latest
 ```
 
 ---
@@ -718,7 +718,7 @@ It includes:
 
 ## 🔗 Links
 
-* 🐳 Docker Hub: [hagar633/bank_sys](https://hub.docker.com/r/hagar633/bank_sys)
+* 🐳 Docker Hub: [hagar633/bank_sys](https://hub.docker.com/r/hagar633/bank_sys2)
 * 🤗 HuggingFace Model: [Hagar633/face-recognition-svc](https://huggingface.co/Hagar633/face-recognition-svc)
 * 💻 GitHub: [yaramahmoudd11/Bank-Security-System](https://github.com/yaramahmoudd11/Bank-Security-System)
 
