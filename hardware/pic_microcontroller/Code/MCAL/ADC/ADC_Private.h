@@ -18,8 +18,8 @@
 #ifndef ADC_PRIVATE_H
 #define ADC_PRIVATE_H
 
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\SERVICES\BIT_MATH.h"
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\SERVICES\STD_TYPES.h"
+#include "../../SERVICES/BIT_MATH.h"
+#include "../../SERVICES/STD_TYPES.h"
 
 /*******************************************************************************
  * TYPE DEFINITIONS

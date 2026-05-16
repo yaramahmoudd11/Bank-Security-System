@@ -77,7 +77,7 @@
  * PCFG[3:0] bits determine the configuration
  * Example: 0x06 = All pins digital except AN0
  ******************************************************************************/
-#define ADC_PORT_CONFIG         0x00    // All pins analog (PCFG3:PCFG0 = 0000)
+#define ADC_PORT_CONFIG         0x0E    // AN0 analog only, other AN pins digital
 
 /* Common Port Configurations */
 #define ADC_ALL_ANALOG          0x00    // AN0-AN7 all analog, VREF+ = VDD, VREF- = VSS

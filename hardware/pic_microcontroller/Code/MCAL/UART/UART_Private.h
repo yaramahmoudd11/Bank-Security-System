@@ -13,15 +13,8 @@
 #ifndef UART_PRIVATE_H
 #define UART_PRIVATE_H
 
-/******************************************************************************
- *                      TYPE DEFINITIONS
- ******************************************************************************/
-typedef unsigned char       u8;
-typedef unsigned int        u16;
-typedef unsigned long       u32;
-typedef signed char         s8;
-typedef signed int          s16;
-typedef signed long         s32;
+#include "../../SERVICES/STD_TYPES.h"
+#include "../../SERVICES/BIT_MATH.h"
 
 /******************************************************************************
  *                      UART REGISTER ADDRESSES
@@ -89,28 +82,6 @@ typedef signed long         s32;
  ******************************************************************************/
 #define TRISC_TX            6       // RC6/TX pin direction (output when 0)
 #define TRISC_RX            7       // RC7/RX pin direction (input when 1)
-
-/******************************************************************************
- *                      BIT MANIPULATION MACROS
- ******************************************************************************/
-/* Set a specific bit in a register */
-#define SET_BIT(REG, BIT)       ((REG) |= (1 << (BIT)))
-
-/* Clear a specific bit in a register */
-#define CLR_BIT(REG, BIT)       ((REG) &= ~(1 << (BIT)))
-
-/* Toggle a specific bit in a register */
-#define TOG_BIT(REG, BIT)       ((REG) ^= (1 << (BIT)))
-
-/* Read a specific bit from a register */
-#define GET_BIT(REG, BIT)       (((REG) >> (BIT)) & 0x01)
-
-/* Write a value to a specific bit */
-#define WRITE_BIT(REG, BIT, VAL) \
-    do { \
-        if (VAL) SET_BIT(REG, BIT); \
-        else CLR_BIT(REG, BIT); \
-    } while(0)
 
 /******************************************************************************
  *                      UART STATUS MACROS

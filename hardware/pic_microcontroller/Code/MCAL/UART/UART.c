@@ -31,6 +31,10 @@
  */
 void UART_Init(void)
 {
+    /* Configure UART pins */
+    CLR_BIT(TRISC, TRISC_TX);           // RC6/TX output
+    SET_BIT(TRISC, TRISC_RX);           // RC7/RX input
+
     /* Step 1: Disable serial port during configuration */
     CLR_BIT(RCSTA, RCSTA_SPEN);
 

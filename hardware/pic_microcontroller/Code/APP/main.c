@@ -1,117 +1,167 @@
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\MCAL\ADC\ADC_Interface.h"
+/******************************************************************************
+ * @file    main.c
+ * @brief   PIC16F877A Security I/O + ADC voltage UART transmission
+ * @target  PIC16F877A
+ ******************************************************************************/
 
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\MCAL\GPIO\GPIO_interface.h"
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\MCAL\GPIO\GPIO_private.h"
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\MCAL\GPIO\GPIO_config.h"
+#include "../MCAL/GPIO/GPIO_interface.h"
+#include "../MCAL/ADC/ADC_Interface.h"
+#include "../MCAL/UART/UART_Interface.h"
+#include "../SERVICES/STD_TYPES.h"
 
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\SERVICES\BIT_MATH.h"
-#include "D:\FELO - ZC\YEAR 3\SEMISTER 2\CIE 349 (Embedded Systems)\Project Code\Code\SERVICES\STD_TYPES.h"
+/* ========================== PIN MAPPING ================================== */
 
-void System_Init(void){
+#define VOLTAGE_ADC_CHANNEL        ADC_CHANNEL_0     /* RA0 / AN0 */
+#define VOLTAGE_THRESHOLD_MV       1000U             /* 1V threshold */
+#define ADC_VREF_MV                5000U             /* VDD reference = 5V */
 
-    u16 adc_value = 0;
-    u16 voltage_mv = 0;
-    u8 rb1_state;
-    u8 rb2_state;
-    u8 rd4_state;
+/* Inputs */
+#define PIR_INPUT_PORT             GPIO_PORTB
+#define PIR_INPUT_PIN              GPIO_PIN1         /* RB1 */
 
+#define LOCK_INPUT_PORT            GPIO_PORTB
+#define LOCK_INPUT_PIN             GPIO_PIN2         /* RB2 */
 
-    GPIO_SetPinDirection(GPIO_PORTD, GPIO_PIN0, GPIO_OUTPUT);
-    GPIO_SetPinDirection(GPIO_PORTD, GPIO_PIN1, GPIO_OUTPUT);
-    GPIO_SetPinDirection(GPIO_PORTD, GPIO_PIN2, GPIO_OUTPUT);
-    GPIO_SetPinDirection(GPIO_PORTD, GPIO_PIN3, GPIO_OUTPUT);
-    GPIO_SetPinDirection(GPIO_PORTC, GPIO_PIN6, GPIO_OUTPUT);
+#define EXTRA_INPUT_PORT           GPIO_PORTD
+#define EXTRA_INPUT_PIN            GPIO_PIN4         /* RD4 */
 
-    GPIO_SetPinDirection(GPIO_PORTB, GPIO_PIN1, GPIO_INPUT);
-    GPIO_SetPinDirection(GPIO_PORTB, GPIO_PIN2, GPIO_INPUT);
-    GPIO_SetPinDirection(GPIO_PORTC, GPIO_PIN7, GPIO_INPUT);
-    GPIO_SetPinDirection(GPIO_PORTD, GPIO_PIN4, GPIO_INPUT);
-    GPIO_SetPinDirection(GPIO_PORTA, GPIO_PIN0, GPIO_INPUT);
+#define VOLTAGE_INPUT_PORT         GPIO_PORTA
+#define VOLTAGE_INPUT_PIN          GPIO_PIN0         /* RA0 */
 
-    /* Set Initial state to LOW */
-    GPIO_SetPinValue(GPIO_PORTD, GPIO_PIN0, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTD, GPIO_PIN1, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTD, GPIO_PIN2, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTD, GPIO_PIN3, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTD, GPIO_PIN4, GPIO_LOW);
+/* Outputs */
+#define LOCK_OUTPUT_PORT           GPIO_PORTD
+#define LOCK_OUTPUT_PIN            GPIO_PIN0         /* RD0 */
 
-    GPIO_SetPinValue(GPIO_PORTC, GPIO_PIN6, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTC, GPIO_PIN7, GPIO_LOW);
+#define ALARM_OUTPUT_PORT          GPIO_PORTD
+#define ALARM_OUTPUT_PIN           GPIO_PIN1         /* RD1 */
 
-    GPIO_SetPinValue(GPIO_PORTB, GPIO_PIN1, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTB, GPIO_PIN2, GPIO_LOW);
+#define VOLTAGE_OUTPUT_PORT        GPIO_PORTD
+#define VOLTAGE_OUTPUT_PIN         GPIO_PIN2         /* RD2 */
 
-    GPIO_SetPinValue(GPIO_PORTA, GPIO_PIN0, GPIO_LOW);
-    
+#define PIR_OUTPUT_PORT            GPIO_PORTD
+#define PIR_OUTPUT_PIN             GPIO_PIN3         /* RD3 */
 
-}
+/* UART pins */
+#define UART_TX_PORT               GPIO_PORTC
+#define UART_TX_PIN                GPIO_PIN6         /* RC6 / TX */
 
-void basic_ops(void)
+#define UART_RX_PORT               GPIO_PORTC
+#define UART_RX_PIN                GPIO_PIN7         /* RC7 / RX */
+
+/* ========================== GLOBAL VARIABLES ============================= */
+
+static u16 adc_value = 0;
+static u16 voltage_mv = 0;
+static u8 rb1_state = 0;
+static u8 rb2_state = 0;
+static u8 rd4_state = 0;
+
+/* ========================== FUNCTION PROTOTYPES =========================== */
+
+static void System_Init(void);
+static void Read_Inputs(void);
+static void Apply_Output_Logic(void);
+static void Send_ADC_UART(void);
+
+/* ========================== FUNCTION DEFINITIONS ========================== */
+
+static void System_Init(void)
 {
- rb1_state = GPIO_GetPinValue(GPIO_PORTB, GPIO_PIN1);
- rb2_state = GPIO_GetPinValue(GPIO_PORTB, GPIO_PIN2);
- rd4_state = GPIO_GetPinValue(GPIO_PORTD, GPIO_PIN4);
+    /* Digital inputs */
+    GPIO_SetPinDirection(PIR_INPUT_PORT, PIR_INPUT_PIN, GPIO_INPUT);       /* RB1 input */
+    GPIO_SetPinDirection(LOCK_INPUT_PORT, LOCK_INPUT_PIN, GPIO_INPUT);     /* RB2 input */
+    GPIO_SetPinDirection(EXTRA_INPUT_PORT, EXTRA_INPUT_PIN, GPIO_INPUT);   /* RD4 input */
 
- if(rb1_state == 1U && rb2_state == 0U)
- {
-  GPIO_SetPinValue(GPIO_PORTD, GPIO_PIN0, GPIO_HIGH);
-  GPIO_SetPinValue(GPIO_PORTD, RD0_PIN, GPIO_HIGH);
-  GPIO_SetPinValue(GPIO_PORTD, RD1_PIN, GPIO_HIGH);
-  GPIO_SetPinValue(GPIO_PORTD, RD4_PIN, GPIO_LOW);
- }
+    /* Analog input */
+    GPIO_SetPinDirection(VOLTAGE_INPUT_PORT, VOLTAGE_INPUT_PIN, GPIO_INPUT); /* RA0 input */
 
- if(rb1_state == 0U && rb2_state == 0U)
- {
-   GPIO_SetPinValue(GPIO_PORTD, RD3_PIN, GPIO_LOW);
-   GPIO_SetPinValue(GPIO_PORTD, RD1_PIN, GPIO_LOW);
-   GPIO_SetPinValue(GPIO_PORTD, RD0_PIN, GPIO_LOW);
-   GPIO_SetPinValue(GPIO_PORTD, RD4_PIN, GPIO_LOW);
- }
+    /* Outputs */
+    GPIO_SetPinDirection(LOCK_OUTPUT_PORT, LOCK_OUTPUT_PIN, GPIO_OUTPUT);       /* RD0 output */
+    GPIO_SetPinDirection(ALARM_OUTPUT_PORT, ALARM_OUTPUT_PIN, GPIO_OUTPUT);     /* RD1 output */
+    GPIO_SetPinDirection(VOLTAGE_OUTPUT_PORT, VOLTAGE_OUTPUT_PIN, GPIO_OUTPUT); /* RD2 output */
+    GPIO_SetPinDirection(PIR_OUTPUT_PORT, PIR_OUTPUT_PIN, GPIO_OUTPUT);         /* RD3 output */
 
- if(rb1_state == 0U && rb2_state == 1U)
- {
-    GPIO_SetPinValue(GPIO_PORTD, RD3_PIN, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTD, RD1_PIN, GPIO_LOW);
-    GPIO_SetPinValue(GPIO_PORTD, RD0_PIN, GPIO_HIGH);
-    GPIO_SetPinValue(GPIO_PORTD, RD4_PIN, GPIO_HIGH);
- }
+    /* UART pins */
+    GPIO_SetPinDirection(UART_TX_PORT, UART_TX_PIN, GPIO_OUTPUT);   /* RC6 TX output */
+    GPIO_SetPinDirection(UART_RX_PORT, UART_RX_PIN, GPIO_INPUT);    /* RC7 RX input */
 
- if(rb1_state == 1U && rb2_state == 1U)
- {
-    GPIO_SetPinValue(GPIO_PORTD, RD3_PIN, GPIO_HIGH);
-    GPIO_SetPinValue(GPIO_PORTD, RD0_PIN, GPIO_HIGH);
-    GPIO_SetPinValue(GPIO_PORTD, RD1_PIN, GPIO_HIGH);
-    GPIO_SetPinValue(GPIO_PORTD, RD4_PIN, GPIO_HIGH);
- }
+    /* Initial output states */
+    GPIO_SetPinValue(LOCK_OUTPUT_PORT, LOCK_OUTPUT_PIN, GPIO_LOW);
+    GPIO_SetPinValue(ALARM_OUTPUT_PORT, ALARM_OUTPUT_PIN, GPIO_LOW);
+    GPIO_SetPinValue(VOLTAGE_OUTPUT_PORT, VOLTAGE_OUTPUT_PIN, GPIO_LOW);
+    GPIO_SetPinValue(PIR_OUTPUT_PORT, PIR_OUTPUT_PIN, GPIO_LOW);
+
+    ADC_Init();
+    UART_Init();
 }
 
-void main() {
-    
+static void Read_Inputs(void)
+{
+    rb1_state = GPIO_GetPinValue(PIR_INPUT_PORT, PIR_INPUT_PIN);
+    rb2_state = GPIO_GetPinValue(LOCK_INPUT_PORT, LOCK_INPUT_PIN);
+    rd4_state = GPIO_GetPinValue(EXTRA_INPUT_PORT, EXTRA_INPUT_PIN);
+
+    adc_value = ADC_ReadChannel(VOLTAGE_ADC_CHANNEL);
+    voltage_mv = ADC_ConvertToVoltage(adc_value, ADC_VREF_MV);
+
+    /* rd4_state is read because RD4 is required as input.
+       No output action is assigned to RD4 in the requested logic. */
+    (void)rd4_state;
+}
+
+static void Apply_Output_Logic(void)
+{
+    /* RB2 high -> RD0 high */
+    if (rb2_state == GPIO_HIGH)
+    {
+        GPIO_SetPinValue(LOCK_OUTPUT_PORT, LOCK_OUTPUT_PIN, GPIO_HIGH);
+    }
+    else
+    {
+        GPIO_SetPinValue(LOCK_OUTPUT_PORT, LOCK_OUTPUT_PIN, GPIO_LOW);
+    }
+
+    /* RA0 voltage exceeds 1V threshold -> RD2 high */
+    if (voltage_mv > VOLTAGE_THRESHOLD_MV)
+    {
+        GPIO_SetPinValue(VOLTAGE_OUTPUT_PORT, VOLTAGE_OUTPUT_PIN, GPIO_HIGH);
+    }
+    else
+    {
+        GPIO_SetPinValue(VOLTAGE_OUTPUT_PORT, VOLTAGE_OUTPUT_PIN, GPIO_LOW);
+    }
+
+    /* RB1 high -> RD3 high and RD1 high */
+    if (rb1_state == GPIO_HIGH)
+    {
+        GPIO_SetPinValue(PIR_OUTPUT_PORT, PIR_OUTPUT_PIN, GPIO_HIGH);
+        GPIO_SetPinValue(ALARM_OUTPUT_PORT, ALARM_OUTPUT_PIN, GPIO_HIGH);
+    }
+    else
+    {
+        GPIO_SetPinValue(PIR_OUTPUT_PORT, PIR_OUTPUT_PIN, GPIO_LOW);
+        GPIO_SetPinValue(ALARM_OUTPUT_PORT, ALARM_OUTPUT_PIN, GPIO_LOW);
+    }
+}
+
+static void Send_ADC_UART(void)
+{
+    /* Send ADC value as 2 binary bytes: high byte then low byte.
+       This matches the Raspberry Pi code that reads ser.read(2). */
+    UART_SendByte((u8)(adc_value >> 8));
+    UART_SendByte((u8)(adc_value & 0xFF));
+}
+
+void main(void)
+{
     System_Init();
-    // --- ADC Initialization ---
-    // Call the Initialization function from your ADC.c driver
-    ADC_Init();
 
-    // Main infinite loop
-    while(1) {
+    while (1)
+    {
+        Read_Inputs();
+        Apply_Output_Logic();
+        Send_ADC_UART();
 
-        
-        // Read the 10-bit raw ADC value from Channel 0 (blocking function)
-        adc_value = ADC_ReadChannel(0);
-
-        // Convert the raw ADC value to voltage in millivolts
-        // Assuming a standard 5.0V (5000mV) reference voltage (VDD)
-        voltage_mv = ADC_ConvertToVoltage(adc_value, 5000);
-
-        // --- Logic condition ---
-        // Check if the calculated voltage is less than 1 Volt (1000 mV)
-        if (voltage_mv < 1000) {
-            PORTD.B0 = 1;  // Make RD0 HIGH
-        } else {
-            PORTD.B0 = 0;  // Make RD0 LOW
-        }
-
-        // Small delay to provide system stability and prevent rapid toggling
-        Delay_ms(100);
+        Delay_ms(500);
     }
 }
