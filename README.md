@@ -213,5 +213,3 @@ sudo docker push hagar633/bank_sys:latest
 
 ---
 
-## 👩‍💻 Team
-Built as part of a bank vault security project.
