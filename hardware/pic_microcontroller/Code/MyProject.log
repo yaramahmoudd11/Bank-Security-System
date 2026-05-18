@@ -1,0 +1,18 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP16F877A -DL -O11111114 -fo16 -N"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\MyProject.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\HAL\LED\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\HAL\SWITCH\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\MCAL\ADC\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\MCAL\GPIO\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\MCAL\UART\" -SP"C:\Users\yaram\Bank-Smart-Security-System\hardware\pic_microcontroller\Code\APP\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" "LED.c" "SWITCH.c" "ADC.c" "GPIO.c" "UART.c" "main.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl"	 
+diagnostics: 0	122	Compilation Started	std_types.h
+diagnostics: 27	123	Compiled Successfully	LED.c
+diagnostics: 0	122	Compilation Started	std_types.h
+diagnostics: 14	123	Compiled Successfully	SWITCH.c
+diagnostics: 0	122	Compilation Started	std_types.h
+diagnostics: 347	123	Compiled Successfully	ADC.c
+diagnostics: 0	122	Compilation Started	std_types.h
+diagnostics: 138	123	Compiled Successfully	GPIO.c
+diagnostics: 0	122	Compilation Started	std_types.h
+diagnostics: 455	123	Compiled Successfully	UART.c
+diagnostics: 0	122	Compilation Started	std_types.h
+diagnostics: 256	123	Compiled Successfully	main.c
+diagnostics: 0	127	All files Compiled in 1391 ms	 
+diagnostics: 0	125	Project Linked Successfully	MyProject.mcppi
+diagnostics: 0	128	Linked in 78 ms	 
+diagnostics: 0	129	Project 'MyProject.mcppi' completed: 1703 ms	 
+diagnostics: 0	103	Finished successfully: 18 May 2026, 14:30:42	MyProject.mcppi

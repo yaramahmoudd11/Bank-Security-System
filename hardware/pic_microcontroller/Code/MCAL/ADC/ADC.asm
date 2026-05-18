@@ -15,6 +15,8 @@ _ADC_Init:
 	MOVF       R0+0, 0
 	MOVWF      ADC_Init_temp_adcon1_L0+0
 ;ADC.c,64 :: 		temp_adcon1 |= (ADC_PORT_CONFIG & PCFG_MASK);
+	MOVLW      14
+	IORWF      R0+0, 1
 	MOVF       R0+0, 0
 	MOVWF      ADC_Init_temp_adcon1_L0+0
 ;ADC.c,67 :: 		ADCON1_REG = temp_adcon1;
