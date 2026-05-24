@@ -1,0 +1,35 @@
+Info: Processing symbol 'C1:Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm'.
+Info: Processing symbol 'C2:Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm'.
+Info: Processing symbol 'D1:LED_THT:LED_D5.0mm'.
+Info: Processing symbol 'D2:LED_THT:LED_D5.0mm'.
+Info: Processing symbol 'J1:Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical'.
+Info: Processing symbol 'J2:Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical'.
+Info: Processing symbol 'J3:Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical'.
+Info: Processing symbol 'J4:Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical'.
+Info: Processing symbol 'J5:TerminalBlock_CUI:TerminalBlock_CUI_TB007-508-02_1x02_P5.08mm_Horizontal'.
+Info: Processing symbol 'J7:Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical'.
+Info: Processing symbol 'J9:Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical'.
+Info: Processing symbol 'J10:Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical'.
+Info: Processing symbol 'R1:Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal'.
+Info: Processing symbol 'R2:Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal'.
+Info: Processing symbol 'U1:Package_DIP:DIP-40_W15.24mm'.
+Info: Processing symbol 'Y1:Crystal:Crystal_HC49-U_Vertical'.
+Add C1 (footprint 'Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm').
+Add C2 (footprint 'Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm').
+Add D1 (footprint 'LED_THT:LED_D5.0mm').
+Add D2 (footprint 'LED_THT:LED_D5.0mm').
+Add J1 (footprint 'Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical').
+Add J2 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical').
+Add J3 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical').
+Add J4 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical').
+Add J5 (footprint 'TerminalBlock_CUI:TerminalBlock_CUI_TB007-508-02_1x02_P5.08mm_Horizontal').
+Add J7 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical').
+Add J9 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical').
+Add J10 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical').
+Add R1 (footprint 'Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal').
+Add R2 (footprint 'Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal').
+Add U1 (footprint 'Package_DIP:DIP-40_W15.24mm').
+Add Y1 (footprint 'Crystal:Crystal_HC49-U_Vertical').
+
+
+Info: Total warnings: 0, errors: 0.
